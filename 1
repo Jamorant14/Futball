@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Football Life</title>
+<style>
+  * { box-sizing: border-box; }
+  body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    background:#0f1a10; 
+    color:#eee; 
+    max-width:480px; 
+    margin:0 auto; 
+    padding:12px 12px 80px 12px; 
+    min-height: 100vh;
+  }
+  h1 { font-size:22px; text-align:center; color:#7CFC9A; margin: 8px 0 16px 0; }
+  .card { background:#1c2b1e; border-radius:12px; padding:16px; margin-bottom:12px; }
+  .stat-row { display:flex; justify-content:space-between; margin:6px 0; font-size:14px; }
+  .bar-bg { background:#333; border-radius:6px; height:10px; overflow:hidden; margin-top:2px; }
+  .bar-fill { height:100%; background:#7CFC9A; transition: width 0.3s ease; }
+  button { width:100%; padding:14px; margin:6px 0; background:#2d4a2f; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; }
+  button:active { background:#3d5a3f; }
+  .event-log { font-size:14px; line-height:1.5; max-height:200px; overflow-y:auto; }
+  .event-log p { margin:4px 0; border-bottom:1px solid #2a3a2c; padding-bottom:4px; }
+  input, select { width:100%; padding:12px; margin:6px 0 12px 0; border-radius:8px; border:none; font-size:15px; background:#2a3a2c; color:#fff; }
+  #app { display:block; }
+  .age-badge { text-align:center; font-size:18px; font-weight:bold; color:#7CFC9A; }
+  
+  .layout { display:flex; flex-direction:column; }
+  .main-col { width:100%; }
+  
+  /* Bottom Navigation Bar for Vertical Layout */
+  .tabs { 
+    position: fixed; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 100%; 
+    max-width: 480px; 
+    display: flex; 
+    flex-direction: row; 
+    background: #142216; 
+    border-top: 1px solid #2a3a2c; 
+    z-index: 100;
+    overflow-x: auto;
+  }
+  .tab-btn { 
+    flex: 1; 
+    min-width: 60px;
+    padding: 8px 4px; 
+    margin: 0; 
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #fff; 
+    border: none; 
+    border-radius: 0; 
+    opacity: 0.55; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 2px; 
+    background: transparent;
+  }
+  .tab-btn .ic { font-size: 18px; }
+  .tab-btn.active { opacity: 1; background: #2a3a2c; border-top: 2px solid #7CFC9A; }
+  .placeholder { text-align:center; color:#777; padding:30px 10px; font-size:14px; }
+</style>
+</head>
+<body>
+<h1>⚽ Football Life</h1>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   CONFIG SECTION — edit freely to change game content/balance
+   ============================================================ */
+
+const CONFIG = {
+  startAge: 16,
+  retireAge: 38,
+  startStats: { skill: 20, stamina: 70, reputation: 5, money: 100, happiness: 70 },
+
+  // Random events by age range. Each: {text, effects, minAge, maxAge}
+  events: [
+    { text: "You got picked for the school first team.", effects: { skill: 3, reputation: 2 }, minAge: 16, maxAge: 18 },
+    { text: "You twisted your ankle in training.", effects: { stamina: -10, happiness: -5 }, minAge: 16, maxAge: 34 },
+    { text: "A scout watched your match this week.", effects: { reputation: 4 }, minAge: 16, maxAge: 22 },
+    { text: "You spent extra hours practicing free kicks.", effects: { skill: 4, stamina: -3 }, minAge: 16, maxAge: 34 },
+    { text: "Your team won the local cup!", effects: { happiness: 10, reputation: 3 }, minAge: 16, maxAge: 34 },
+    { text: "You had a rough patch of form.", effects: { reputation: -3, happiness: -5 }, minAge: 17, maxAge: 34 },
+    { text: "A sponsor offered you boots and gear.", effects: { money: 50 }, minAge: 18, maxAge: 34 },
+    { text: "You picked up a minor injury in a friendly.", effects: { stamina: -8 }, minAge: 16, maxAge: 34 },
+    { text: "Fans started recognizing you around town.", effects: { happiness: 5, reputation: 2 }, minAge: 19, maxAge: 34 },
+    { text: "You had a disagreement with your coach.", effects: { happiness: -6 }, minAge: 16, maxAge: 34 }
+  ],
+
+  // Career stage thresholds based on age + reputation
+  stages: [
+    { name: "Schoolboy", maxAge: 17 },
+    { name: "Academy Prospect", maxAge: 20 },
+    { name: "Pro Footballer", maxAge: 34 },
+    { name: "Retired Legend", maxAge: 99 }
+  ],
+
+  // Pro contract offer chance/scale once you're old enough & good enough
+  proOfferMinAge: 18,
+  proOfferMinRep: 25
+};
+
+const TABS = [
+  { id: "overview", label: "Overview", icon: "🏠" },
+  { id: "training", label: "Training", icon: "💪" },
+  { id: "team", label: "Team", icon: "🛡️" },
+  { id: "career", label: "Career", icon: "📈" },
+  { id: "shop", label: "Shop", icon: "🛒" },
+  { id: "social", label: "Social", icon: "💬" },
+  { id: "awards", label: "Awards", icon: "🏆" }
+];
+
+/* ============================================================
+   GAME STATE
+   ============================================================ */
+
+let state = null;
+let currentTab = "training";
+
+function newGame(name, position) {
+  state = {
+    name, position,
+    age: CONFIG.startAge,
+    stats: { ...CONFIG.startStats },
+    stage: CONFIG.stages[0].name,
+    club: "Sunday League U16s",
+    log: [`Welcome, ${name}! Your journey as a ${position} begins at age ${CONFIG.startAge}.`],
+    proContract: false,
+    gameOver: false
+  };
+  render();
+}
+
+function clamp(v, lo=0, hi=100){ return Math.max(lo, Math.min(hi, v)); }
+
+function applyEffects(effects) {
+  for (const k in effects) {
+    if (k === "money") state.stats.money += effects[k];
+    else state.stats[k] = clamp(state.stats[k] + effects[k]);
+  }
+}
+
+function updateStage() {
+  for (const s of CONFIG.stages) {
+    if (state.age <= s.maxAge) { state.stage = s.name; break; }
+  }
+}
+
+function ageUp() {
+  if (state.gameOver) return;
+  state.age++;
+  state.stats.stamina = clamp(state.stats.stamina + 5);
+
+  const pool = CONFIG.events.filter(e => state.age >= e.minAge && state.age <= e.maxAge);
+  if (pool.length && Math.random() < 0.85) {
+    const ev = pool[Math.floor(Math.random() * pool.length)];
+    applyEffects(ev.effects);
+    state.log.unshift(`Age ${state.age}: ${ev.text}`);
+  } else {
+    state.log.unshift(`Age ${state.age}: A quiet year of training.`);
+    applyEffects({ skill: 1 });
+  }
+
+  updateStage();
+
+  if (!state.proContract && state.age >= CONFIG.proOfferMinAge && state.stats.reputation >= CONFIG.proOfferMinRep) {
+    if (Math.random() < 0.4) {
+      state.proContract = true;
+      state.club = "Riverside United FC";
+      state.stats.money += 500;
+      state.log.unshift(`Age ${state.age}: You signed your first professional contract with ${state.club}!`);
+    }
+  }
+
+  if (state.age >= CONFIG.retireAge) {
+    state.gameOver = true;
+    state.log.unshift(`Age ${state.age}: You retired from football. Final reputation: ${state.stats.reputation}.`);
+  }
+
+  if (state.stats.stamina <= 0) {
+    state.log.unshift(`Age ${state.age}: Burnout forced an early retirement.`);
+    state.gameOver = true;
+  }
+
+  render();
+}
+
+function trainExtra() {
+  if (state.stats.stamina < 15) {
+    state.log.unshift("You're too exhausted to train harder right now.");
+  } else {
+    applyEffects({ skill: 5, stamina: -15, happiness: -2 });
+    state.log.unshift(`Age ${state.age}: Extra training session paid off.`);
+  }
+  render();
+}
+
+function rest() {
+  applyEffects({ stamina: 15, happiness: 5 });
+  state.log.unshift(`Age ${state.age}: You took time to rest and recover.`);
+  render();
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+
+function render() {
+  const app = document.getElementById("app");
+
+  if (!state) {
+    app.innerHTML = `
+      <div class="card">
+        <label>Player name</label>
+        <input id="nameInput" placeholder="e.g. Jordan Cruz" />
+        <label>Position</label>
+        <select id="posInput">
+          <option>Striker</option>
+          <option>Winger</option>
+          <option>Midfielder</option>
+          <option>Defender</option>
+          <option>Goalkeeper</option>
+        </select>
+        <button onclick="startGame()">Start career</button>
+      </div>`;
+    return;
+  }
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="age-badge">Age ${state.age} — ${state.stage}</div>
+      <p style="text-align:center; color:#aaa; margin:4px 0 0 0;">${state.name} · ${state.position} · ${state.club}</p>
+    </div>
+    <div class="layout">
+      <div class="main-col">
+        <div id="tabContent"></div>
+      </div>
+      <div class="tabs">
+        ${TABS.map(t => `<button class="tab-btn ${t.id===currentTab?'active':''}" onclick="switchTab('${t.id}')"><span class="ic">${t.icon}</span><span>${t.label}</span></button>`).join("")}
+      </div>
+    </div>`;
+
+  document.getElementById("tabContent").innerHTML = renderTab(currentTab);
+}
+
+function switchTab(id) { currentTab = id; render(); }
+
+function renderTab(id) {
+  if (id === "training") return renderTraining();
+  if (id === "overview") return renderOverview();
+  const names = { team: "Team", career: "Career", shop: "Shop", social: "Social", awards: "Awards" };
+  return `<div class="card"><p class="placeholder">${names[id]} — nothing here yet.</p></div>`;
+}
+
+function renderOverview() {
+  return `
+    <div class="card">
+      <p class="placeholder">Overview — nothing here yet.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      ${state.gameOver
+        ? `<button onclick="restart()">Start a new career</button>`
+        : `<button onclick="ageUp()" style="font-size:17px; padding:16px;">⏭ Age up (next year)</button>`}
+    </div>`;
+}
+
+function renderTraining() {
+  const s = state.stats;
+  return `
+    <div class="card">
+      ${statBar("Skill", s.skill)}
+      ${statBar("Stamina", s.stamina)}
+      ${statBar("Reputation", s.reputation)}
+      ${statBar("Happiness", s.happiness)}
+      <div class="stat-row" style="margin-top:10px;"><span>Money</span><span>$${s.money}</span></div>
+    </div>
+    <div class="card">
+      ${state.gameOver
+        ? `<button onclick="restart()">Start a new career</button>`
+        : `<button onclick="trainExtra()">Train extra</button>
+           <button onclick="rest()">Rest</button>`}
+    </div>
+    <div class="card event-log">
+      ${state.log.map(l => `<p>${l}</p>`).join("")}
+    </div>`;
+}
+
+function statBar(label, val) {
+  return `<div class="stat-row"><span>${label}</span><span>${val}</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:${val}%"></div></div>`;
+}
+
+function startGame() {
+  const name = document.getElementById("nameInput").value.trim() || "Alex Rivera";
+  const pos = document.getElementById("posInput").value;
+  newGame(name, pos);
+}
+
+function restart() { state = null; render(); }
+
+render();
+</script>
+</body>
+</html>
