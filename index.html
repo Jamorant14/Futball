@@ -24,7 +24,7 @@
   }
 
   h1 { 
-    font-size: 22px; 
+    font-size: 20px; 
     text-align: center; 
     color: #7CFC9A; 
     margin: 0 0 10px 0; 
@@ -41,7 +41,7 @@
   .card { 
     background: #152217; 
     border-radius: 12px; 
-    padding: 14px; 
+    padding: 12px; 
     margin-bottom: 10px; 
   }
 
@@ -90,13 +90,14 @@
     color: #111; 
   }
 
-  .age-badge { text-align: center; font-size: 17px; font-weight: bold; color: #7CFC9A; }
+  .age-badge { text-align: center; font-size: 16px; font-weight: bold; color: #7CFC9A; }
 
   .layout { 
     display: flex; 
     gap: 8px; 
     flex: 1; 
     min-height: 0; 
+    margin-bottom: 8px;
   }
   
   .main-col { 
@@ -143,6 +144,42 @@
   .tab-btn.active { 
     opacity: 1; 
     box-shadow: inset 0 0 0 2px #ffffffaa; 
+  }
+
+  /* Bottom Stats Bar (Spans full width under tabs and content) */
+  .bottom-stats {
+    flex: 0 0 auto;
+    background: #152217;
+    border-radius: 10px;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .stat-card {
+    background: #1f3322;
+    border-radius: 8px;
+    padding: 6px 4px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stat-card .lbl {
+    font-size: 10px;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .stat-card .val {
+    font-size: 14px;
+    font-weight: bold;
+    color: #7CFC9A;
+    margin-top: 2px;
   }
 
   .placeholder { text-align: center; color: #777; padding: 30px 10px; font-size: 14px; }
@@ -300,6 +337,8 @@ function render() {
     return;
   }
 
+  const s = state.stats;
+
   app.innerHTML = `
     <div class="layout">
       <div class="main-col">
@@ -307,6 +346,25 @@ function render() {
       </div>
       <div class="tabs">
         ${TABS.map(t => `<button class="tab-btn ${t.id===currentTab?'active':''}" style="background:${t.color}" onclick="switchTab('${t.id}')"><span class="ic">${t.icon}</span><span>${t.label}</span></button>`).join("")}
+      </div>
+    </div>
+    
+    <div class="bottom-stats">
+      <div class="stat-card">
+        <span class="lbl">⚡ Energy</span>
+        <span class="val">${s.stamina}%</span>
+      </div>
+      <div class="stat-card">
+        <span class="lbl">😊 Happiness</span>
+        <span class="val">${s.happiness}%</span>
+      </div>
+      <div class="stat-card">
+        <span class="lbl">⭐ Rep</span>
+        <span class="val">${s.reputation}</span>
+      </div>
+      <div class="stat-card">
+        <span class="lbl">💵 Money</span>
+        <span class="val">$${s.money}</span>
       </div>
     </div>`;
 
@@ -342,11 +400,7 @@ function renderTraining() {
   const s = state.stats;
   return `
     <div class="card">
-      ${statBar("Skill", s.skill)}
-      ${statBar("Stamina", s.stamina)}
-      ${statBar("Reputation", s.reputation)}
-      ${statBar("Happiness", s.happiness)}
-      <div class="stat-row" style="margin-top:8px;"><span>Money</span><span>$${s.money}</span></div>
+      ${statBar("Skill Level", s.skill)}
     </div>
     <div class="card">
       ${state.gameOver
