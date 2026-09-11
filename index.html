@@ -20,14 +20,14 @@
   body {
     display: flex;
     flex-direction: column;
-    padding: 12px;
+    padding: 10px;
   }
 
   h1 { 
     font-size: 20px; 
     text-align: center; 
     color: #7CFC9A; 
-    margin: 0 0 10px 0; 
+    margin: 0 0 8px 0; 
     flex: 0 0 auto;
   }
 
@@ -40,9 +40,9 @@
 
   .card { 
     background: #152217; 
-    border-radius: 12px; 
-    padding: 12px; 
-    margin-bottom: 10px; 
+    border-radius: 10px; 
+    padding: 10px; 
+    margin-bottom: 8px; 
   }
 
   .card.flex-fill {
@@ -51,21 +51,22 @@
     flex-direction: column;
     min-height: 0;
     margin-bottom: 0;
+    overflow: hidden;
   }
 
-  .stat-row { display: flex; justify-content: space-between; margin: 4px 0; font-size: 14px; font-weight: 500; }
-  .bar-bg { background: #2a3a2c; border-radius: 6px; height: 10px; overflow: hidden; margin-top: 2px; }
+  .stat-row { display: flex; justify-content: space-between; margin: 3px 0; font-size: 13px; font-weight: 500; }
+  .bar-bg { background: #2a3a2c; border-radius: 4px; height: 8px; overflow: hidden; margin-top: 1px; }
   .bar-fill { height: 100%; background: #7CFC9A; }
 
   button { 
     width: 100%; 
-    padding: 12px; 
-    margin: 4px 0; 
+    padding: 10px; 
+    margin: 3px 0; 
     background: #253b27; 
     color: #fff; 
     border: none; 
     border-radius: 8px; 
-    font-size: 15px; 
+    font-size: 14px; 
     font-weight: 600; 
     cursor: pointer; 
   }
@@ -76,16 +77,16 @@
     flex: 1; 
     min-height: 0;
   }
-  .event-log p { margin: 4px 0; border-bottom: 1px solid #233525; padding-bottom: 4px; font-size: 13px; color: #ddd; }
+  .event-log p { margin: 3px 0; border-bottom: 1px solid #233525; padding-bottom: 3px; font-size: 12px; color: #ddd; }
 
-  label { font-size: 14px; color: #eee; display: block; margin-top: 6px; }
+  label { font-size: 13px; color: #eee; display: block; margin-top: 4px; }
   input, select { 
     width: 100%; 
-    padding: 12px; 
-    margin: 6px 0 12px 0; 
+    padding: 10px; 
+    margin: 4px 0 10px 0; 
     border-radius: 8px; 
     border: none; 
-    font-size: 15px; 
+    font-size: 14px; 
     background: #fff; 
     color: #111; 
   }
@@ -97,7 +98,6 @@
     gap: 8px; 
     flex: 1; 
     min-height: 0; 
-    margin-bottom: 8px;
   }
   
   .main-col { 
@@ -117,7 +117,7 @@
   .tabs { 
     display: flex; 
     flex-direction: column; 
-    flex: 0 0 76px; 
+    flex: 0 0 72px; 
     border-radius: 10px; 
     overflow: hidden; 
     height: 100%; 
@@ -128,7 +128,7 @@
     flex: 1; 
     padding: 0; 
     margin: 0; 
-    font-size: 11px; 
+    font-size: 10px; 
     font-weight: 600; 
     color: #fff; 
     border: none; 
@@ -138,51 +138,55 @@
     flex-direction: column; 
     align-items: center; 
     justify-content: center; 
-    gap: 2px; 
+    gap: 1px; 
   }
-  .tab-btn .ic { font-size: 18px; }
+  .tab-btn .ic { font-size: 16px; }
   .tab-btn.active { 
     opacity: 1; 
     box-shadow: inset 0 0 0 2px #ffffffaa; 
   }
 
-  /* Bottom Stats Bar (Spans full width under tabs and content) */
-  .bottom-stats {
-    flex: 0 0 auto;
-    background: #152217;
-    border-radius: 10px;
-    padding: 8px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+  /* Stats Accordion & Details */
+  .stats-scroll {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    padding-right: 4px;
   }
 
-  .stat-card {
-    background: #1f3322;
-    border-radius: 8px;
-    padding: 6px 4px;
-    text-align: center;
+  .cat-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-  }
-
-  .stat-card .lbl {
-    font-size: 10px;
-    color: #aaa;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  .stat-card .val {
-    font-size: 14px;
+    background: #1c2e1f;
+    padding: 6px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
     font-weight: bold;
+    font-size: 13px;
     color: #7CFC9A;
-    margin-top: 2px;
+    cursor: pointer;
   }
 
-  .placeholder { text-align: center; color: #777; padding: 30px 10px; font-size: 14px; }
+  .sub-stat {
+    padding-left: 8px;
+    margin: 4px 0;
+  }
+
+  .ovr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #253b27;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .placeholder { text-align: center; color: #777; padding: 30px 10px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -190,22 +194,30 @@
 <div id="app"></div>
 
 <script>
+const STAT_CATEGORIES = {
+  Pace: ["Acceleration", "Sprint Speed"],
+  Shooting: ["Free Kick", "Finishing", "Shot Power", "Long Shots", "Volleys", "Penalties"],
+  Passing: ["Vision", "Crossing", "Short Pass", "Long Pass", "Curve"],
+  Dribbling: ["Agility", "Balance", "Reactions", "Ball Control", "Dribbling", "Composure"],
+  Defending: ["Interceptions", "Heading Acc.", "Stand Tackle", "Slide Tackle"],
+  Physical: ["Jumping", "Stamina", "Strength", "Aggression"]
+};
+
 const CONFIG = {
   startAge: 16,
   retireAge: 38,
-  startStats: { skill: 20, stamina: 70, reputation: 5, money: 100, happiness: 70 },
 
   events: [
-    { text: "You got picked for the school first team.", effects: { skill: 3, reputation: 2 }, minAge: 16, maxAge: 18 },
-    { text: "You twisted your ankle in training.", effects: { stamina: -10, happiness: -5 }, minAge: 16, maxAge: 34 },
-    { text: "A scout watched your match this week.", effects: { reputation: 4 }, minAge: 16, maxAge: 22 },
-    { text: "You spent extra hours practicing free kicks.", effects: { skill: 4, stamina: -3 }, minAge: 16, maxAge: 34 },
-    { text: "Your team won the local cup!", effects: { happiness: 10, reputation: 3 }, minAge: 16, maxAge: 34 },
-    { text: "You had a rough patch of form.", effects: { reputation: -3, happiness: -5 }, minAge: 17, maxAge: 34 },
-    { text: "A sponsor offered you boots and gear.", effects: { money: 50 }, minAge: 18, maxAge: 34 },
-    { text: "You picked up a minor injury in a friendly.", effects: { stamina: -8 }, minAge: 16, maxAge: 34 },
-    { text: "Fans started recognizing you around town.", effects: { happiness: 5, reputation: 2 }, minAge: 19, maxAge: 34 },
-    { text: "You had a disagreement with your coach.", effects: { happiness: -6 }, minAge: 16, maxAge: 34 }
+    { text: "You got picked for the school first team.", minAge: 16, maxAge: 18 },
+    { text: "You twisted your ankle in training.", minAge: 16, maxAge: 34 },
+    { text: "A scout watched your match this week.", minAge: 16, maxAge: 22 },
+    { text: "You spent extra hours practicing free kicks.", minAge: 16, maxAge: 34 },
+    { text: "Your team won the local cup!", minAge: 16, maxAge: 34 },
+    { text: "You had a rough patch of form.", minAge: 17, maxAge: 34 },
+    { text: "A sponsor offered you boots and gear.", minAge: 18, maxAge: 34 },
+    { text: "You picked up a minor injury in a friendly.", minAge: 16, maxAge: 34 },
+    { text: "Fans started recognizing you around town.", minAge: 19, maxAge: 34 },
+    { text: "You had a disagreement with your coach.", minAge: 16, maxAge: 34 }
   ],
 
   stages: [
@@ -232,11 +244,39 @@ const TABS = [
 let state = null;
 let currentTab = "training";
 
+function createInitialAttributes() {
+  const attrs = {};
+  for (const cat in STAT_CATEGORIES) {
+    STAT_CATEGORIES[cat].forEach(stat => {
+      attrs[stat] = Math.floor(Math.random() * 10) + 30; // base ~30-40
+    });
+  }
+  return attrs;
+}
+
+function getCategoryRating(cat) {
+  if (!state) return 0;
+  const stats = STAT_CATEGORIES[cat];
+  const total = stats.reduce((sum, s) => sum + (state.attributes[s] || 0), 0);
+  return Math.round(total / stats.length);
+}
+
+function getOverallRating() {
+  if (!state) return 0;
+  const cats = Object.keys(STAT_CATEGORIES);
+  const total = cats.reduce((sum, cat) => sum + getCategoryRating(cat), 0);
+  return Math.round(total / cats.length);
+}
+
 function newGame(name, position) {
   state = {
     name, position,
     age: CONFIG.startAge,
-    stats: { ...CONFIG.startStats },
+    attributes: createInitialAttributes(),
+    stamina: 70,
+    happiness: 70,
+    reputation: 5,
+    money: 100,
     stage: CONFIG.stages[0].name,
     club: "Sunday League U16s",
     log: [`Welcome, ${name}! Your journey as a ${position} begins at age ${CONFIG.startAge}.`],
@@ -246,14 +286,7 @@ function newGame(name, position) {
   render();
 }
 
-function clamp(v, lo=0, hi=100){ return Math.max(lo, Math.min(hi, v)); }
-
-function applyEffects(effects) {
-  for (const k in effects) {
-    if (k === "money") state.stats.money += effects[k];
-    else state.stats[k] = clamp(state.stats[k] + effects[k]);
-  }
-}
+function clamp(v, lo=0, hi=99){ return Math.max(lo, Math.min(hi, v)); }
 
 function updateStage() {
   for (const s of CONFIG.stages) {
@@ -264,35 +297,40 @@ function updateStage() {
 function ageUp() {
   if (state.gameOver) return;
   state.age++;
-  state.stats.stamina = clamp(state.stats.stamina + 5);
+  state.stamina = clamp(state.stamina + 10, 0, 100);
 
   const pool = CONFIG.events.filter(e => state.age >= e.minAge && state.age <= e.maxAge);
   if (pool.length && Math.random() < 0.85) {
     const ev = pool[Math.floor(Math.random() * pool.length)];
-    applyEffects(ev.effects);
     state.log.unshift(`Age ${state.age}: ${ev.text}`);
   } else {
     state.log.unshift(`Age ${state.age}: A quiet year of training.`);
-    applyEffects({ skill: 1 });
+  }
+
+  // Slight natural growth across attributes
+  const allAttrs = Object.keys(state.attributes);
+  for (let i = 0; i < 3; i++) {
+    const randAttr = allAttrs[Math.floor(Math.random() * allAttrs.length)];
+    state.attributes[randAttr] = clamp(state.attributes[randAttr] + 1);
   }
 
   updateStage();
 
-  if (!state.proContract && state.age >= CONFIG.proOfferMinAge && state.stats.reputation >= CONFIG.proOfferMinRep) {
+  if (!state.proContract && state.age >= CONFIG.proOfferMinAge && state.reputation >= CONFIG.proOfferMinRep) {
     if (Math.random() < 0.4) {
       state.proContract = true;
       state.club = "Riverside United FC";
-      state.stats.money += 500;
+      state.money += 500;
       state.log.unshift(`Age ${state.age}: You signed your first professional contract with ${state.club}!`);
     }
   }
 
   if (state.age >= CONFIG.retireAge) {
     state.gameOver = true;
-    state.log.unshift(`Age ${state.age}: You retired from football. Final reputation: ${state.stats.reputation}.`);
+    state.log.unshift(`Age ${state.age}: You retired from football. Final overall rating: ${getOverallRating()}.`);
   }
 
-  if (state.stats.stamina <= 0) {
+  if (state.stamina <= 0) {
     state.log.unshift(`Age ${state.age}: Burnout forced an early retirement.`);
     state.gameOver = true;
   }
@@ -301,17 +339,27 @@ function ageUp() {
 }
 
 function trainExtra() {
-  if (state.stats.stamina < 15) {
+  if (state.stamina < 15) {
     state.log.unshift("You're too exhausted to train harder right now.");
   } else {
-    applyEffects({ skill: 5, stamina: -15, happiness: -2 });
-    state.log.unshift(`Age ${state.age}: Extra training session paid off.`);
+    state.stamina = clamp(state.stamina - 15, 0, 100);
+    state.happiness = clamp(state.happiness - 2, 0, 100);
+
+    // Boost 2 random attributes
+    const allAttrs = Object.keys(state.attributes);
+    const a1 = allAttrs[Math.floor(Math.random() * allAttrs.length)];
+    const a2 = allAttrs[Math.floor(Math.random() * allAttrs.length)];
+    state.attributes[a1] = clamp(state.attributes[a1] + 2);
+    state.attributes[a2] = clamp(state.attributes[a2] + 2);
+
+    state.log.unshift(`Age ${state.age}: Extra training improved ${a1} and ${a2}.`);
   }
   render();
 }
 
 function rest() {
-  applyEffects({ stamina: 15, happiness: 5 });
+  state.stamina = clamp(state.stamina + 20, 0, 100);
+  state.happiness = clamp(state.happiness + 5, 0, 100);
   state.log.unshift(`Age ${state.age}: You took time to rest and recover.`);
   render();
 }
@@ -337,8 +385,6 @@ function render() {
     return;
   }
 
-  const s = state.stats;
-
   app.innerHTML = `
     <div class="layout">
       <div class="main-col">
@@ -346,25 +392,6 @@ function render() {
       </div>
       <div class="tabs">
         ${TABS.map(t => `<button class="tab-btn ${t.id===currentTab?'active':''}" style="background:${t.color}" onclick="switchTab('${t.id}')"><span class="ic">${t.icon}</span><span>${t.label}</span></button>`).join("")}
-      </div>
-    </div>
-    
-    <div class="bottom-stats">
-      <div class="stat-card">
-        <span class="lbl">⚡ Energy</span>
-        <span class="val">${s.stamina}%</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">😊 Happiness</span>
-        <span class="val">${s.happiness}%</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">⭐ Rep</span>
-        <span class="val">${s.reputation}</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">💵 Money</span>
-        <span class="val">$${s.money}</span>
       </div>
     </div>`;
 
@@ -387,37 +414,61 @@ function renderOverview() {
       <p style="text-align:center; color:#aaa; margin:6px 0 0 0; font-size:13px;">${state.name} · ${state.position} · ${state.club}</p>
     </div>
     <div class="card flex-fill">
-      <p class="placeholder">Overview — nothing here yet.</p>
+      <div class="stat-row"><span>Overall Rating</span><span><strong>${getOverallRating()}</strong></span></div>
+      <div class="stat-row"><span>Stamina</span><span>${state.stamina}%</span></div>
+      <div class="stat-row"><span>Happiness</span><span>${state.happiness}%</span></div>
+      <div class="stat-row"><span>Reputation</span><span>${state.reputation}</span></div>
+      <div class="stat-row"><span>Money</span><span>$${state.money}</span></div>
     </div>
     <div class="card" style="text-align:center; margin-bottom: 0;">
       ${state.gameOver
         ? `<button onclick="restart()">Start a new career</button>`
-        : `<button onclick="ageUp()" style="font-size:16px; padding:14px;">⏭ Age up (next year)</button>`}
+        : `<button onclick="ageUp()" style="font-size:15px; padding:12px;">⏭ Age up (next year)</button>`}
     </div>`;
 }
 
 function renderTraining() {
-  const s = state.stats;
+  let statsHtml = "";
+  for (const cat in STAT_CATEGORIES) {
+    const catRating = getCategoryRating(cat);
+    statsHtml += `
+      <div class="cat-header">
+        <span>${cat}*</span>
+        <span>${catRating}</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${catRating}%"></div></div>`;
+    
+    STAT_CATEGORIES[cat].forEach(stat => {
+      const val = state.attributes[stat] || 0;
+      statsHtml += `
+        <div class="sub-stat">
+          <div class="stat-row"><span style="color:#aaa;">${stat}</span><span>${val}</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:${val}%; background:#5cb874;"></div></div>
+        </div>`;
+    });
+  }
+
   return `
-    <div class="card">
-      ${statBar("Skill Level", s.skill)}
+    <div class="card flex-fill">
+      <div class="ovr-header">
+        <span>OVERALL RATING</span>
+        <span style="color:#7CFC9A;">${getOverallRating()}</span>
+      </div>
+      <div class="stats-scroll">
+        ${statsHtml}
+      </div>
     </div>
     <div class="card">
       ${state.gameOver
         ? `<button onclick="restart()">Start a new career</button>`
-        : `<button onclick="trainExtra()">Train extra</button>
-           <button onclick="rest()">Rest</button>`}
+        : `<button onclick="trainExtra()">Train extra (-15% Energy)</button>
+           <button onclick="rest()">Rest (+20% Energy)</button>`}
     </div>
     <div class="card flex-fill">
       <div class="event-log">
         ${state.log.map(l => `<p>${l}</p>`).join("")}
       </div>
     </div>`;
-}
-
-function statBar(label, val) {
-  return `<div class="stat-row"><span>${label}</span><span>${val}</span></div>
-    <div class="bar-bg"><div class="bar-fill" style="width:${val}%"></div></div>`;
 }
 
 function startGame() {
